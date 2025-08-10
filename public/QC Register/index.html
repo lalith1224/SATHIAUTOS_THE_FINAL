@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QC Register</title>
+  <title>Q.C.REGISTER</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.263.1/font/lucide.css">
   <style>
@@ -606,8 +606,9 @@
   <div class="particles-background" id="particles-background"></div>
   <div class="app-container">
     <div class="header-section">
-      <h1 class="main-title">Quality Control Register</h1>
+      <h1 class="main-title">QC Management System</h1>
       <p class="subtitle">By Nexus Tech</p>
+      <p class="subtitle">Q.C.REGISTER</p>
     </div>
 
     <div class="main-content">
@@ -624,10 +625,10 @@
           <div class="sub-section">
             <h2>Basic Information</h2>
             <div class="grid">
-             <div class="form-group required">
-  <label for="record_date">Record Date</label>
-  <input type="date" id="record_date" required>
-</div>
+              <div class="form-group required">
+                <label for="record_date">Record Date</label>
+                <input type="date" id="record_date" required>
+              </div>
               
               <div class="form-group">
                 <label for="disa_line">DISA Line</label>
@@ -658,11 +659,6 @@
                 <label for="qty_moulds">Quantity of Moulds</label>
                 <input type="number" id="qty_moulds" min="0">
               </div>
-              
-              <div class="form-group">
-                <label for="remarks">Remarks</label>
-                <textarea id="remarks" rows="3"></textarea>
-              </div>
             </div>
           </div>
           
@@ -670,7 +666,7 @@
           <div class="metal-composition-container">
             <!-- Metal Composition 1 -->
             <div class="sub-section">
-              <h2>Metal Composition 1 (%)</h2>
+              <h2> Metal Composition (%)</h2>
               <div class="metal-composition-section">
                 <div class="form-group">
                   <label for="c1">C</label>
@@ -721,7 +717,7 @@
             
             <!-- Metal Composition 2 -->
             <div class="sub-section">
-              <h2>Metal Composition 2 (%)</h2>
+              <h2>Corrective Addition (Kgs)</h2>
               <div class="metal-composition-section">
                 <div class="form-group">
                   <label for="c2">C</label>
@@ -766,7 +762,7 @@
             <h2>Pouring Parameters</h2>
             <div class="grid">
               <div class="form-group">
-                <label for="pouring_time">Pouring Time</label>
+                <label for="pouring_time">Time of Pouring</label>
                 <input type="time" id="pouring_time">
               </div>
               
@@ -843,15 +839,15 @@
               </div>
               
               <div class="form-group">
-                <label for="corrective_addition_kgs">Corrective Addition (kgs)</label>
-                <input type="number" id="corrective_addition_kgs" step="0.001">
-              </div>
-              
-              <div class="form-group">
                 <label for="tapping_wt_kgs">Tapping Weight (kgs)</label>
                 <input type="number" id="tapping_wt_kgs" step="0.001">
               </div>
             </div>
+          </div>
+
+          <div class="form-group">
+            <label for="remarks">Remarks</label>
+            <textarea id="remarks" rows="3"></textarea>
           </div>
           
           <div class="submit-button-container">

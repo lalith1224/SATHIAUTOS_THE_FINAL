@@ -19,9 +19,9 @@ router.post('/api/inspection-register', async (req, res) => {
   const { inspection_date, shift, item_description, inspection_time, defects_and_quantity } = req.body;
   try {
     const result = await pool.query(
-      `INSERT INTO inspection_register (inspection_date, shift, item_description, inspection_time, defects_and_quantity)
-       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [inspection_date, shift, item_description, inspection_time, defects_and_quantity]
+      `INSERT INTO inspection_register (inspection_date, shift, inspector_name, item_description, inspection_time, defects_and_quantity)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [inspection_date, shift, inspector_name, item_description, inspection_time, defects_and_quantity]
     );
     if (result.rowCount === 1) {
       res.status(201).json({

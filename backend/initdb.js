@@ -45,6 +45,7 @@ async function initializeDatabase() {
       id SERIAL PRIMARY KEY,
       inspection_date DATE NOT NULL,
       shift VARCHAR(50),
+      inspector_name TEXT NOT NULL,
       item_description TEXT NOT NULL,
       inspection_time TIME,
       defects_and_quantity TEXT,
@@ -99,10 +100,20 @@ async function initializeDatabase() {
   // tensile_test_report
   await pool.query(`
     CREATE TABLE IF NOT EXISTS tensile_test_report (
-      c2 FLOAT,
-      si2 FLOAT,
-      mn2 FLOAT,
-      s2 FLOAT
+      id SERIAL PRIMARY KEY,
+      test_date DATE NOT NULL,
+      item VARCHAR(255) NOT NULL,
+      heat_code VARCHAR(100),
+      diameter_mm NUMERIC(10,2),
+      initial_length_mm NUMERIC(10,2),
+      final_length_mm NUMERIC(10,2),
+      breaking_load_kn NUMERIC(10,2),
+      yield_load_kn NUMERIC(10,2),
+      uts_n_mm2 NUMERIC(10,2),
+      ys_n_mm2 NUMERIC(10,2),
+      elongation_percent NUMERIC(5,2),
+      remarks TEXT,
+      created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
     );
   `);
 
