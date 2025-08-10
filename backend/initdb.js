@@ -1,6 +1,17 @@
 const pool = require('./database');
 
 
+// Test database connection for InitDB
+pool.connect((err, client, done) => {
+    if (err) {
+        console.error('InitDB - Database connection test failed:', err.stack);
+    } else {
+        console.log('InitDB - Database connected successfully');
+        done();
+    }
+});
+
+
 async function initializeDatabase() {
   // master_data
   await pool.query(`

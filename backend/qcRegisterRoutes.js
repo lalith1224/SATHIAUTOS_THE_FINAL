@@ -1,6 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('./database');
+// Test database connection for QC Register
+pool.connect((err, client, done) => {
+    if (err) {
+        console.error('QCRegisterRoutes - Database connection test failed:', err.stack);
+    } else {
+        console.log('QCRegisterRoutes - Database connected successfully');
+        done();
+    }
+});
 
 // POST endpoint to submit QC register data
 router.post('/api/qc-register', async (req, res) => {
