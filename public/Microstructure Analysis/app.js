@@ -1,35 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Configuration
   const BACKEND_PORT = window.BACKEND_PORT || 3000;
   const BACKEND_URL = `http://localhost:${BACKEND_PORT}`;
 
-  // DOM Elements
   const form = document.getElementById('microstructureForm');
-  const alert = document.getElementById('alert');
   const recordsTableBody = document.getElementById('recordsTableBody');
   const refreshBtn = document.getElementById('refreshBtn');
   const submitBtn = document.querySelector('.submit-btn');
 
-  // Load records on page load
   loadRecords();
-
-  // Auto-refresh every 30 seconds
   const refreshInterval = setInterval(loadRecords, 30000);
 
-  // Event Listeners
   form.addEventListener('submit', handleFormSubmit);
   refreshBtn.addEventListener('click', loadRecords);
 
-  // Functions
   async function loadRecords() {
     try {
       showLoadingState();
       const response = await fetch(`${BACKEND_URL}/api/microstructure-analysis`);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
       displayRecords(data);
     } catch (error) {
@@ -66,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </tr>`;
       return;
     }
-    
     recordsTableBody.innerHTML = records.map(row => `
       <tr>
         <td>${row.id}</td>
@@ -89,35 +76,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function handleFormSubmit(e) {
     e.preventDefault();
-    
+
     if (!validateForm()) {
-      showAlert('Please fill all required fields.', 'error');
+      showAlert('error', 'Please fill all required fields.');
       return;
     }
-    
+
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
-    
+
     try {
       setSubmitButtonState(true);
-      
       const response = await fetch(`${BACKEND_URL}/api/microstructure-analysis`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      
+
       const result = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to submit data');
-      }
-      
-      showAlert('Microstructure analysis submitted successfully!', 'success');
+      if (!response.ok) throw new Error(result.error || 'Failed to submit data');
+
+      showAlert('success', 'Microstructure analysis submitted successfully!');
       form.reset();
       loadRecords();
     } catch (error) {
-      showAlert(`Failed to submit analysis: ${error.message}`, 'error');
+      showAlert('error', `Failed to submit analysis: ${error.message}`);
     } finally {
       setSubmitButtonState(false);
     }
@@ -136,18 +119,32 @@ document.addEventListener('DOMContentLoaded', () => {
     return isValid;
   }
 
-  function showAlert(message, type) {
-    alert.textContent = message;
-    alert.className = `alert ${type === 'success' ? 'alert-success' : 'alert-error'}`;
-    alert.style.display = 'block';
+  // Floating styled alert
+  function showAlert(type, message) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert ${type}`;
+    alertDiv.innerHTML = `
+      <i class="lucide ${type === 'success' ? 'lucide-check-circle' : 'lucide-alert-circle'}"></i>
+      <span>${message}</span>
+      <i class="lucide lucide-x close-alert"></i>
+    `;
+
+    document.body.appendChild(alertDiv);
+
     setTimeout(() => {
-      alert.style.display = 'none';
+      alertDiv.classList.add('fade-out');
+      setTimeout(() => alertDiv.remove(), 300);
     }, 5000);
+
+    alertDiv.querySelector('.close-alert').addEventListener('click', () => {
+      alertDiv.classList.add('fade-out');
+      setTimeout(() => alertDiv.remove(), 300);
+    });
   }
 
   function setSubmitButtonState(isSubmitting) {
     if (isSubmitting) {
-      submitBtn.innerHTML = '<i class="lucide lucide-loader"></i> Submitting...';
+      submitBtn.innerHTML = '<i class="lucide lucide-loader animate-spin"></i> Submitting...';
       submitBtn.disabled = true;
     } else {
       submitBtn.innerHTML = '<i class="lucide lucide-check"></i> Submit Analysis';
@@ -155,8 +152,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Clean up interval when window is unloaded
-  window.addEventListener('beforeunload', () => {
-    clearInterval(refreshInterval);
-  });
+  // Alert styles
+  const style = document.createElement('style');
+  style.textContent = `
+    .alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      animation: slideIn 0.3s ease-out;
+      max-width: 400px;
+      color: white;
+    }
+    .alert.success { background: #43AA8B; }
+    .alert.error { background: #E63946; }
+    .alert i:first-child { font-size: 1.25rem; }
+    .alert .close-alert {
+      margin-left: auto;
+      cursor: pointer;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+    .alert .close-alert:hover { opacity: 1; }
+    .fade-out { animation: fadeOut 0.3s ease-out forwards; }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @keyframes fadeOut { to { opacity: 0; transform: translateY(-20px); } }
+    .animate-spin { animation: spin 1s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  `;
+  document.head.appendChild(style);
+
+  window.addEventListener('beforeunload', () => clearInterval(refreshInterval));
 });
