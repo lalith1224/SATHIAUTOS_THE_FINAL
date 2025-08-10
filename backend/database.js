@@ -14,5 +14,14 @@ const pool = new Pool({
     password: process.env.DB_PASS,
     port: process.env.DB_PORT,
 });
+// Test database connection for Database.js
+pool.connect((err, client, done) => {
+    if (err) {
+        console.error('Database.js - Database connection test failed:', err.stack);
+    } else {
+        console.log('Database.js - Database connected successfully');
+        done();
+    }
+});
 
 module.exports = pool;

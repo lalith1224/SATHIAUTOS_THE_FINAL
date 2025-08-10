@@ -7,12 +7,14 @@ const PORT = process.env.PORT || 3000;
 
 // ✅ Use express.json() BEFORE the routes
 app.use(express.json());
+// Serve static files from public directory
+app.use(express.static('public'));
 
 // ✅ CORS middleware (also before routes)
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
 
@@ -32,6 +34,12 @@ const hardnessTestRecordRouter = require('./hardnessTestRecordRoutes');
 const carbonSulphurLecoAnalysisRegisterRouter = require('./carbonSulphurLecoAnalysisRegisterRoutes');
 const errorProofVerificationChecklistFDYRouter = require('./errorProofVerificationChecklistFDYRoutes');
 
+
+// Authentication routes
+const { router: authRouter } = require('./auth/authRoutes');
+// Admin routes
+const listUsersRouter = require('./admin/listUsersRoutes');
+
 app.use('/', QF07Router);
 app.use('/', QF07FBQ03Router);
 app.use('/', timeStudyRouter);
@@ -46,6 +54,8 @@ app.use('/', rejectionAnalysisRegisterRouter); // Register Rejection Analysis Re
 app.use('/', hardnessTestRecordRouter); // Register Hardness Test Record routes
 app.use('/', carbonSulphurLecoAnalysisRegisterRouter); // Register Carbon Sulphur Leco Analysis Register routes
 app.use('/', errorProofVerificationChecklistFDYRouter); // Register Error Proof Verification Checklist FDY routes
+app.use('/auth', authRouter); // Register Authentication routes
+app.use('/admin', listUsersRouter); // Register admin user listing route
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
