@@ -38,7 +38,109 @@
       z-index: -1;
       pointer-events: none;
     }
-    
+    /* Table Section */
+.table-section {
+  flex: 1;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.28);
+  margin: 1rem;
+}
+
+.table-header {
+  margin-bottom: 1.5rem;
+}
+
+.table-header h2 {
+  color: #1e293b;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Table Styles */
+.table-responsive {
+  flex: 1;
+  overflow: auto;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 1px solid #e2e8f0;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  font-size: 0.9rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th {
+  background-color: white;
+  color: #222;
+  padding: 1.2rem 1rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border: none;
+  box-shadow: 0 2px 4px rgba(125, 211, 252, 0.3);
+}
+
+th:first-child {
+  border-top-left-radius: 12px;
+}
+
+th:last-child {
+  border-top-right-radius: 12px;
+}
+
+td {
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+tr:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .table-responsive {
+    border-radius: 8px;
+  }
+  
+  th, td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
     .particle {
       position: absolute;
       border-radius: 50%;
@@ -539,9 +641,8 @@
   <div class="app-container">
     <img src="../bg2.png" alt="Logo" class="header-logo">
     <div class="header-section" data-aos="fade-down">
-      <h1 class="main-title">QC Management System</h1>
+      <h1 class="main-title">Impact Test Report</h1>
       <p class="subtitle">By Nexus Tech</p>
-      <p class="subtitle">Impact Test Report</p>
     </div>
 
     <div class="main-content">
@@ -597,7 +698,30 @@
       </div>
     </div>
   </div>
-
+<div class="table-section" data-aos="fade" >
+  <div class="table-header">
+    <h2 style="text-align: center;">Impact Test Results</h2>
+  </div>
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Inspection Date</th>
+          <th>Part Name</th>
+          <th>Date Code</th>
+          <th>Specification</th>
+          <th>Observed Value</th>
+          <th>Remarks</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+      <tbody id="results-table-body">
+        <!-- Data will be inserted here by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+</div>
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="app.js"></script>
