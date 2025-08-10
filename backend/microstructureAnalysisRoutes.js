@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = express.Router();
 const pool = require('./database');
@@ -39,6 +40,8 @@ router.post('/', async (req, res) => {
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
+     console.error("🔥 Error in /mtructure-analysis route:", err);
+    res.status(500).json({ error: err.message });
     res.status(500).json({ error: 'Failed to create record' });
   }
 });

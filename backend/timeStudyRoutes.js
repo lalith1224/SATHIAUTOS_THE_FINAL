@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router();
 const pool = require('./database');
 
+// Test database connection for Time Study
+pool.connect((err, client, done) => {
+    if (err) {
+        console.error('TimeStudyRoutes - Database connection test failed:', err.stack);
+    } else {
+        console.log('TimeStudyRoutes - Database connected successfully');
+        done();
+    }
+});
+
 // POST endpoint to submit time study data
 router.post('/api/time-study', async (req, res) => {
     const {
@@ -59,8 +69,8 @@ router.get('/api/time-study/records', async (req, res) => {
           part_name, heat_code, grade,
           timestamp   -- ✅ use raw timestamp instead of to_char
       FROM time_study_process
-     
-      LIMIT 50;
+      ORDER BY id DESC
+      LIMIT 5;
     `);
 
     res.json(result.rows); // ✅ Always return an array

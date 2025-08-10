@@ -27,15 +27,29 @@ router.post('/api/tensile-test-report', async (req, res) => {
       return res.status(400).json({ error: 'Invalid item_id' });
     }
     const item = prodRes.rows[0].product_description;
-    const result = await pool.query(
-      `INSERT INTO tensile_test_report (
-        inspection_date, item_id, item, heat_code,
-        diameter_mm, initial_length_mm, final_length_mm,
-        breaking_load_kn, yield_load_kn, uts_n_mm2, ys_n_mm2, elongation_percent,
-        remarks
-      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
-      [inspection_date, item_id, item, heat_code, diameter_mm, initial_length_mm, final_length_mm, breaking_load_kn, yield_load_kn, uts_n_mm2, ys_n_mm2, elongation_percent, remarks]
-    );
+   const result = await pool.query(
+  `INSERT INTO tensile_test_report (
+    test_date, item, heat_code,
+    diameter_mm, initial_length_mm, final_length_mm,
+    breaking_load_kn, yield_load_kn, uts_n_mm2, ys_n_mm2, elongation_percent,
+    remarks
+  ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) RETURNING *`,
+  [
+    inspection_date, // $1
+    item,            // $2
+    heat_code,       // $3
+    diameter_mm,     // $4
+    initial_length_mm, // $5
+    final_length_mm,   // $6
+    breaking_load_kn,  // $7
+    yield_load_kn,     // $8
+    uts_n_mm2,         // $9
+    ys_n_mm2,          // $10
+    elongation_percent,// $11
+    remarks            // $12
+  ]
+);
+
     if (result.rowCount === 1) {
       res.status(201).json({
         message: 'Tensile Test Report submitted successfully',

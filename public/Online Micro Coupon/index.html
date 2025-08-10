@@ -29,16 +29,53 @@
       padding: 0;
     }
 
+    
+     .particles-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(210, 105, 30, 0.6); /* Chocolate color particles */
+      animation: float 15s infinite linear;
+    }
+    
+    .particle:nth-child(2n) {
+      background: rgba(244, 162, 97, 0.6); /* Lighter accent color */
+    }
+    
+    .particle:nth-child(3n) {
+      background: rgba(255, 255, 255, 0.6); /* White particles */
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-1000px) translateX(500px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Update your body styles to remove the old background */
     body {
-      background: var(--secondary);
-      background-image: url('../bgsakthi.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-attachment: fixed;
+      background: linear-gradient(135deg, #F9F4F0 0%, #E8E1D9 100%);
       min-height: 100vh;
       width: 100vw;
       font-family: 'Poppins', 'Roboto', Arial, sans-serif;
+      overflow-x: hidden;
     }
     body::before {
       content: "";
@@ -588,6 +625,7 @@
   </style>
 </head>
 <body>
+  <div class="particles-background" id="particles-background"></div>
   <!-- Preloader -->
   <div class="loader">
     <div class="ripple-wrapper">
@@ -696,6 +734,36 @@
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="app.js"></script>
   <script>
+     document.addEventListener('DOMContentLoaded', function() {
+      // Create particles
+      const particlesContainer = document.getElementById('particles-background');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random size between 5px and 15px
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // Random position
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        
+        // Random animation duration and delay
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        particle.style.animation = `float ${duration}s infinite ${delay}s linear`;
+        
+        particlesContainer.appendChild(particle);
+      }
+      
+      // Your existing code
+      updateHourlyTimestamp();
+      setInterval(updateHourlyTimestamp, 60000);
+    });
     document.addEventListener('DOMContentLoaded', () => {
     console.log("DOM fully loaded"); // Debug line
     

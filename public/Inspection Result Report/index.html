@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Microstructure Analysis</title>
+  <title>Inspection Result Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.263.1/font/lucide.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <style>
-        :root {
+    :root {
       --primary: #232946;
       --secondary: #F9F4F8; 
       --success: #43AA8B;
@@ -29,7 +29,7 @@
       padding: 0;
     }
 
-     .particles-background {
+    .particles-background {
       position: fixed;
       top: 0;
       left: 0;
@@ -68,7 +68,6 @@
       }
     }
     
-    /* Update your body styles to remove the old background */
     body {
       background: linear-gradient(135deg, #F9F4F0 0%, #E8E1D9 100%);
       min-height: 100vh;
@@ -182,55 +181,18 @@
       border: 1px solid rgba(255,255,255,0.28);
     }
 
-    /* Table Section - Takes remaining space */
-    .table-section {
-      flex: 1;
-      background: rgba(255,255,255,0.18);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 2rem;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.28);
-    }
-
-    /* Navigation Buttons */
-    .nav-buttons {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      background: var(--primary);
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-
     /* Form Styles */
-    .form-grid {
+    .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
       margin-bottom: 2.5rem;
+      align-items: end;
+    }
+
+    .form-container {
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     .form-group {
@@ -239,6 +201,31 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+    }
+
+    .form-section h3 {
+      color: #1e293b;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 2.5rem 0 1.5rem 0;
+      padding-bottom: 0.8rem;
+      border-bottom: 3px solid #e0f2fe;
+      position: relative;
+    }
+
+    .form-section h3:first-of-type {
+      margin-top: 1.5rem;
+    }
+
+    .form-section h3::before {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(to right, #FFE0B2, #FFB74D);
+      border-radius: 2px;
     }
 
     .form-group label {
@@ -270,7 +257,9 @@
     input[type="text"],
     input[type="number"],
     input[type="date"],
-    select {
+    input[type="datetime-local"],
+    select,
+    textarea {
       width: 100%;
       padding: 1rem 1.2rem;
       border: 2px solid #e2e8f0;
@@ -285,7 +274,16 @@
       box-sizing: border-box;
     }
 
-    input:focus {
+    textarea {
+      min-height: 58px;
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.6;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
       border-color: linear-gradient(to right, #FFE0B2, #FFB74D);
       outline: none;
       background: white;
@@ -293,7 +291,9 @@
       transform: translateY(-2px);
     }
 
-    input:hover:not(:focus) {
+    input:hover:not(:focus),
+    textarea:hover:not(:focus),
+    select:hover:not(:focus) {
       border-color: #cbd5e1;
       box-shadow: 0 4px 12px rgba(0,0,0,0.06);
     }
@@ -351,93 +351,39 @@
       box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
     }
 
-    /* Table Styles */
-    .table-responsive {
-      flex: 1;
-      overflow: auto;
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      border: 1px solid #e2e8f0;
-    }
-
-    .records-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      background: #fff;
-      font-size: 0.9rem;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .records-table th {
-      background-color: white;
-      color: #222;
-      padding: 1.2rem 1rem;
-      text-align: center;
-      font-weight: 600;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border: none;
-      box-shadow: 0 2px 4px rgba(125, 211, 252, 0.3);
-    }
-
-    .records-table th:first-child {
-      border-top-left-radius: 12px;
-    }
-
-    .records-table th:last-child {
-      border-top-right-radius: 12px;
-    }
-
-    .records-table td {
-      padding: 1.2rem 1rem;
-      border-bottom: 1px solid #f1f5f9;
-      vertical-align: middle;
-      text-align: center;
-      font-size: 0.85rem;
-    }
-
-    .records-table tr:hover {
-      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    button[type="submit"]:active {
       transform: translateY(-1px);
-      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
     }
 
-    .records-table tr:last-child td:first-child {
-      border-bottom-left-radius: 12px;
+    button[type="submit"]::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
     }
 
-    .records-table tr:last-child td:last-child {
-      border-bottom-right-radius: 12px;
+    button[type="submit"]:hover::before {
+      left: 100%;
     }
 
-    /* Alert Styles */
-    .alert {
-      padding: 1rem;
-      margin-bottom: 1.5rem;
-      border-radius: 8px;
-      background: rgba(220, 53, 69, 0.1);
-      color: #dc3545;
-      border: 1px solid rgba(220, 53, 69, 0.2);
-      display: none;
+    /* Navigation Buttons */
+    .nav-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
     }
 
-    .alert.show {
-      display: block;
-    }
-
-    .nav-btn {
+    .btn {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
       padding: 0.75rem 1.5rem;
-      margin: 1rem;
       background: var(--primary);
       color: white;
       text-decoration: none;
@@ -449,54 +395,17 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    .nav-btn:hover {
+    .btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
 
-    .refresh-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
+    .btn-secondary {
+      background: #6c757d;
     }
 
-    .refresh-btn:hover {
-      background: var(--dark-gray);
-    }
-
-    .records-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .records-title {
-      font-size: 1.5rem;
-      color: var(--primary);
-    }
-
-    .loading {
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid var(--primary);
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .btn-secondary:hover {
+      background: #5a6268;
     }
 
     /* Preloader Styles */
@@ -585,57 +494,6 @@
       }
     }
 
-    /* Responsive Styles */
-    @media (max-width: 992px) {
-      .main-title {
-        font-size: 2rem;
-      }
-      
-      .subtitle {
-        font-size: 1.1rem;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .header-section::before {
-        display: none;
-      }
-      
-      .records-table {
-        font-size: 0.85rem;
-      }
-      
-      .records-table th, 
-      .records-table td {
-        padding: 0.75rem 0.5rem;
-      }
-    }
-
-    @media (max-width: 576px) {
-      .main-title {
-        font-size: 1.75rem;
-      }
-      
-      .form-section, .table-section {
-        padding: 1.5rem 1rem;
-      }
-      
-      button[type="submit"] {
-        width: 100%;
-        justify-content: center;
-      }
-      
-      .records-header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
-      }
-    }
-
     .header-logo {
       position: absolute;
       top: 18px;
@@ -655,11 +513,20 @@
         left: 8px;
       }
     }
+    /* Particle Animation Background */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      background: transparent;
+    }
   </style>
 </head>
 <body>
   <div class="particles-background" id="particles-background"></div>
-  
   <!-- Preloader -->
   <div class="loader">
     <div class="ripple-wrapper">
@@ -672,129 +539,149 @@
   <div class="app-container">
     <img src="../bg2.png" alt="Logo" class="header-logo">
     <div class="header-section" data-aos="fade-down">
-      <h1 class="main-title">Microstructure Analysis</h1>
-      <p class="subtitle">Quality Control Management System</p>
+      <h1 class="main-title">Inspection Result Report</h1>
+      <p class="subtitle">By Nexus Tech</p>
     </div>
 
     <div class="main-content">
       <div class="content-container">
         <div class="form-section" data-aos="fade-up" data-aos-delay="100">
-          <a href="../index.html" class="nav-btn">
-            <i class="lucide lucide-arrow-left"></i>
-            Back to Dashboard
-          </a>
-          
-          <div class="alert" id="alert"></div>
-          <form id="microstructureForm">
-            <div class="form-grid">
-              <div class="form-group">
-                <label for="analysis_date">Analysis Date</label>
-                <input type="date" id="analysis_date" name="analysis_date" required>
-              </div>
-              <div class="form-group">
-                <label for="part_name">Part Name</label>
-                <input type="text" id="part_name" name="part_name" required>
-              </div>
-              <div class="form-group">
-                <label for="date_code">Date Code</label>
-                <input type="text" id="date_code" name="date_code">
-              </div>
-              <div class="form-group">
-                <label for="heat_code">Heat Code</label>
-                <input type="text" id="heat_code" name="heat_code">
-              </div>
-              <div class="form-group">
-                <label for="nodularity_percentage">Nodularity %</label>
-                <input type="number" step="0.01" id="nodularity_percentage" name="nodularity_percentage">
-              </div>
-              <div class="form-group">
-                <label for="graphite_type">Graphite Type</label>
-                <input type="text" id="graphite_type" name="graphite_type">
-              </div>
-              <div class="form-group">
-                <label for="count_per_mm2">Count per mm²</label>
-                <input type="number" id="count_per_mm2" name="count_per_mm2">
-              </div>
-              <div class="form-group">
-                <label for="size">Size</label>
-                <input type="text" id="size" name="size">
-              </div>
-              <div class="form-group">
-                <label for="ferrite_percentage">Ferrite %</label>
-                <input type="number" step="0.01" id="ferrite_percentage" name="ferrite_percentage">
-              </div>
-              <div class="form-group">
-                <label for="pearlite_percentage">Pearlite %</label>
-                <input type="number" step="0.01" id="pearlite_percentage" name="pearlite_percentage">
-              </div>
-              <div class="form-group">
-                <label for="carbide">Carbide</label>
-                <input type="text" id="carbide" name="carbide">
-              </div>
-              <div class="form-group">
-                <label for="remarks">Remarks</label>
-                <input type="text" id="remarks" name="remarks">
-              </div>
-              <div class="form-group">
-                <label for="disa_line_id">DISA Line ID</label>
-                <input type="number" id="disa_line_id" name="disa_line_id" required>
-              </div>
-            </div>
-            <div class="submit-button-container">
-              <button type="submit" class="submit-btn">
-                <i class="lucide lucide-check"></i>
-                Submit Analysis
-              </button>
-            </div>
-          </form>
-        </div>
+          <div class="nav-buttons">
+            <a href="../index.html" class="btn btn-secondary">
+              <i class="lucide lucide-arrow-left"></i>
+              Back to Main Menu
+            </a>
+          </div>
 
-        <div class="table-section" data-aos="fade-up" data-aos-delay="200">
-          <div class="records-header">
-            <h2 class="records-title">Microstructure Analysis Records</h2>
-            <button class="refresh-btn" id="refreshBtn">
-              <i class="lucide lucide-refresh-cw"></i>
-              Refresh Data
-            </button>
-          </div>
-          <div class="table-responsive">
-            <table class="records-table" id="recordsTable">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Analysis Date</th>
-                  <th>Part Name</th>
-                  <th>Date Code</th>
-                  <th>Heat Code</th>
-                  <th>Nodularity %</th>
-                  <th>Graphite Type</th>
-                  <th>Count/mm²</th>
-                  <th>Size</th>
-                  <th>Ferrite %</th>
-                  <th>Pearlite %</th>
-                  <th>Carbide</th>
-                  <th>Remarks</th>
-                  <th>DISA Line ID</th>
-                </tr>
-              </thead>
-              <tbody id="recordsTableBody">
-                <tr>
-                  <td colspan="14" style="text-align: center; padding: 2rem;">
-                    <div class="loading"></div>
-                    Loading records...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+         <form id="irr-form">
+  <div class="grid">
+    <div class="form-group">
+      <label for="date">Date</label>
+      <input type="date" id="date" name="date" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="month">Month</label>
+      <input type="text" id="month" name="month" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="part_name">Part Name</label>
+      <input type="text" id="part_name" name="part_name" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="part_no">Part Number</label>
+      <input type="text" id="part_no" name="part_no" required>
+    </div>
+    
+    <div class="form-group">
+      <label for="cat">Category</label>
+      <input type="text" id="cat" name="cat">
+    </div>
+    
+    <div class="form-group">
+      <label for="model">Model</label>
+      <input type="text" id="model" name="model">
+    </div>
+    
+    <div class="form-group">
+      <label for="vendor_name">Vendor Name</label>
+      <input type="text" id="vendor_name" name="vendor_name">
+    </div>
+    
+    <div class="form-group">
+      <label for="issue_date">Issue Date</label>
+      <input type="date" id="issue_date" name="issue_date">
+    </div>
+    
+    <div class="form-group">
+      <label for="check_item">Check Item</label>
+      <textarea id="check_item" name="check_item" rows="3"></textarea>
+    </div>
+    
+    <div class="form-group">
+      <label for="specification">Specification</label>
+      <textarea id="specification" name="specification" rows="3"></textarea>
+    </div>
+  </div>
+
+  <h3>Data Codes</h3>
+  <div class="grid">
+    <div class="form-group">
+      <label for="data_code_1">Data Code 1</label>
+      <input type="text" id="data_code_1" name="data_code_1">
+    </div>
+    
+    <div class="form-group">
+      <label for="data_code_2">Data Code 2</label>
+      <input type="text" id="data_code_2" name="data_code_2">
+    </div>
+    
+    <div class="form-group">
+      <label for="data_code_3">Data Code 3</label>
+      <input type="text" id="data_code_3" name="data_code_3">
+    </div>
+    
+    <div class="form-group">
+      <label for="data_code_4">Data Code 4</label>
+      <input type="text" id="data_code_4" name="data_code_4">
+    </div>
+    
+    <div class="form-group">
+      <label for="data_code_5">Data Code 5</label>
+      <input type="text" id="data_code_5" name="data_code_5">
+    </div>
+    
+    <div class="form-group">
+      <label for="data_code_6">Data Code 6</label>
+      <input type="text" id="data_code_6" name="data_code_6">
+    </div>
+    
+    <div class="form-group">
+      <label for="data_code_7">Data Code 7</label>
+      <input type="text" id="data_code_7" name="data_code_7">
+    </div>
+    
+    <div class="form-group">
+      <label for="data_code_8">Data Code 8</label>
+      <input type="text" id="data_code_8" name="data_code_8">
+    </div>
+    
+    <div class="form-group">
+      <label for="data_code_9">Data Code 9</label>
+      <input type="text" id="data_code_9" name="data_code_9">
+    </div>
+    
+    <div class="form-group">
+      <label for="data_code_10">Data Code 10</label>
+      <input type="text" id="data_code_10" name="data_code_10">
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="form-group">
+      <label for="remark">Remarks</label>
+      <textarea id="remark" name="remark" rows="3"></textarea>
+    </div>
+  </div>
+
+  <div class="submit-button-container">
+    <button type="submit">
+      Submit Report
+    </button>
+  </div>
+</form>
         </div>
       </div>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="app.js"></script>
   <script>
+    // Particle.js initialization
     document.addEventListener('DOMContentLoaded', function() {
       // Create particles
       const particlesContainer = document.getElementById('particles-background');
@@ -804,38 +691,46 @@
         const particle = document.createElement('div');
         particle.classList.add('particle');
         
+        // Random size between 5px and 15px
         const size = Math.random() * 10 + 5;
         particle.style.width = `${size}px`;
         particle.style.height = `${size}px`;
+        
+        // Random position
         particle.style.left = `${Math.random() * 100}vw`;
         particle.style.top = `${Math.random() * 100}vh`;
-        particle.style.animation = `float ${Math.random() * 20 + 10}s infinite ${Math.random() * 10}s linear`;
+        
+        // Random animation duration and delay
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 10;
+        particle.style.animation = `float ${duration}s infinite ${delay}s linear`;
+        
         particlesContainer.appendChild(particle);
       }
-      
-      // Initialize AOS animations
-      AOS.init({
-        duration: 600,
-        easing: 'ease-out-quad',
-        once: true,
-        offset: 50
-      });
-
-      // Preloader
-      window.addEventListener('load', function() {
-        const loader = document.querySelector('.loader');
-        setTimeout(() => {
-          loader.classList.add('fade-out');
-        }, 1000);
-      });
-
-      // Set today's date
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = String(today.getMonth() + 1).padStart(2, '0');
-      const day = String(today.getDate()).padStart(2, '0');
-      document.getElementById('analysis_date').value = `${year}-${month}-${day}`;
     });
+    
+    // Initialize AOS animations
+    AOS.init({
+      duration: 600,
+      easing: 'ease-out-quad',
+      once: true,
+      offset: 50
+    });
+
+    // Preloader
+    window.addEventListener('load', function() {
+      const loader = document.querySelector('.loader');
+      setTimeout(() => {
+        loader.classList.add('fade-out');
+      }, 1000);
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    document.getElementById('date').value = `${year}-${month}-${day}`;
+});
   </script>
 </body>
 </html>

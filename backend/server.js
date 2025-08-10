@@ -25,6 +25,12 @@ const microCouponRouter = require('./microCouponRoutes'); // Add Micro Coupon ro
 const inspectionRegisterRouter = require('./inspectionRegisterRoutes');
 const tensileTestReportRouter = require('./tensileTestReportRoutes');
 const microstructureAnalysisRoutes = require('./microstructureAnalysisRoutes');
+const inspectionResultReportRouter = require('./inspectionResultReportRoutes'); // Add Inspection Result Report routes
+const impactTestReportRouter = require('./impactTestReportRoutes');
+const rejectionAnalysisRegisterRouter = require('./rejectionAnalysisRegisterRoutes');
+const hardnessTestRecordRouter = require('./hardnessTestRecordRoutes');
+const carbonSulphurLecoAnalysisRegisterRouter = require('./carbonSulphurLecoAnalysisRegisterRoutes');
+const errorProofVerificationChecklistFDYRouter = require('./errorProofVerificationChecklistFDYRoutes');
 
 app.use('/', QF07Router);
 app.use('/', QF07FBQ03Router);
@@ -34,6 +40,12 @@ app.use('/', microCouponRouter); // Register Micro Coupon routes
 app.use('/', inspectionRegisterRouter); // Register Inspection Register routes at /api/inspection-register
 app.use('/', tensileTestReportRouter); // Register Tensile Test Report routes
 app.use('/api/microstructure-analysis', microstructureAnalysisRoutes);
+app.use('/', inspectionResultReportRouter); // Register Inspection Result Report routes
+app.use('/', impactTestReportRouter); // Register Impact Test Report routes
+app.use('/', rejectionAnalysisRegisterRouter); // Register Rejection Analysis Register routes
+app.use('/', hardnessTestRecordRouter); // Register Hardness Test Record routes
+app.use('/', carbonSulphurLecoAnalysisRegisterRouter); // Register Carbon Sulphur Leco Analysis Register routes
+app.use('/', errorProofVerificationChecklistFDYRouter); // Register Error Proof Verification Checklist FDY routes
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
