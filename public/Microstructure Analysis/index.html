@@ -672,8 +672,9 @@
   <div class="app-container">
     <img src="../bg2.png" alt="Logo" class="header-logo">
     <div class="header-section" data-aos="fade-down">
-      <h1 class="main-title">Microstructure Analysis</h1>
-      <p class="subtitle">Quality Control Management System</p>
+      <h1 class="main-title">QC Management System</h1>
+      <p class="subtitle">By Nexus Techs</p>
+      <p class="subtitle">Microstructure Analysis</p>
     </div>
 
     <div class="main-content">
@@ -681,12 +682,16 @@
         <div class="form-section" data-aos="fade-up" data-aos-delay="100">
           <a href="../index.html" class="nav-btn">
             <i class="lucide lucide-arrow-left"></i>
-            Back to Dashboard
+            Back to Main Menu
           </a>
           
           <div class="alert" id="alert"></div>
           <form id="microstructureForm">
             <div class="form-grid">
+              <div class="form-group">
+                <label for="disa_line_id">DISA Line ID</label>
+                <input type="number" id="disa_line_id" name="disa_line_id" required>
+              </div>
               <div class="form-group">
                 <label for="analysis_date">Analysis Date</label>
                 <input type="date" id="analysis_date" name="analysis_date" required>
@@ -735,15 +740,11 @@
                 <label for="remarks">Remarks</label>
                 <input type="text" id="remarks" name="remarks">
               </div>
-              <div class="form-group">
-                <label for="disa_line_id">DISA Line ID</label>
-                <input type="number" id="disa_line_id" name="disa_line_id" required>
-              </div>
             </div>
             <div class="submit-button-container">
               <button type="submit" class="submit-btn">
                 <i class="lucide lucide-check"></i>
-                Submit Analysis
+                Submit 
               </button>
             </div>
           </form>

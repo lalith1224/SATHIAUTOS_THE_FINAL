@@ -1341,16 +1341,13 @@
      
       <h1 class="main-title" >QC Management System</h1>
       <p class="subtitle">By Nexus Tech</p>
+      <p class="subtitle">MSI 90 INOCULATION SYSTEM CHECKLIST</p>
     </div>
 
     <div class="main-content">
       <div class="content-container">
         <div class="form-section" data-aos="fade-up" data-aos-delay="100">
           <div class="nav-buttons">
-            <a href="../msi 90 incolation/fbq03.html" class="btn">
-              <i class="lucide lucide-file-text"></i>
-              QF 07 FBQ - 03 Form
-            </a>
             <a href="../index.html" class="btn btn-secondary">
               <i class="lucide lucide-arrow-left"></i>
               Back to Main Menu
@@ -1358,7 +1355,7 @@
           </div>
 
           <div id="current-component" data-aos="fade-up" data-aos-delay="150">
-            <h3>Current Component: <span id="selected-component-display">None selected</span></h3>
+            <h3>Component in Production: <span id="selected-component-display">None selected</span></h3>
             <button id="change-component" class="btn">
               <i class="lucide lucide-rotate-cw"></i>
               Change
@@ -1380,6 +1377,12 @@
 
             <h3>Hourly Measurements</h3>
             <div class="grid">
+
+              <div class="form-group">
+                <label>Hourly Timestamp</label>
+                <input type="datetime-local" id="hourly-time">
+              </div>
+              
               <div class="form-group">
                 <label>Inoculation Flow Rate Setting (gms/sec)</label>
                 <input type="number" step="0.01" id="flow-rate-setting" required>
@@ -1430,12 +1433,12 @@
             <h3>Powder Measurements</h3>
             <div class="grid">
               <div class="form-group">
-                <label>Powder Size (mm)</label>
+                <label> Innoculant Powder size (mm)</label>
                 <input type="number" step="0.01" id="powder-size">
               </div>
 
               <div class="form-group">
-                <label>Moisture (%)</label>
+                <label>Innoculant Moisture (%)</label>
                 <input type="number" step="0.01" id="moisture">
               </div>
 
@@ -1447,19 +1450,16 @@
 
             <h3>Daily Checks</h3>
             <div class="grid">
-              <div class="form-group">
-                <label>Hourly Timestamp</label>
-                <input type="datetime-local" id="hourly-time">
-              </div>
+              
 
               <div class="form-group checkbox">
                 <input type="checkbox" id="air-drier" class="stylish-checkbox">
-                <label for="air-drier">Air Drier Functioning</label>
+                <label for="air-drier">Air Drier Function</label>
               </div>
 
               <div class="form-group checkbox">
                 <input type="checkbox" id="filter-cleaning" class="stylish-checkbox">
-                <label for="filter-cleaning">Filter Cleaning Done</label>
+                <label for="filter-cleaning">Filter Cleaning</label>
               </div>
 
               <div class="form-group">

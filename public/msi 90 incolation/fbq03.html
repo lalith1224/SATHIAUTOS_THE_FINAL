@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QF 07 FBQ - 03 Form</title>
+    <title>MSI Incolation Form</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@0.263.1/font/lucide.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -818,11 +818,11 @@
       <div class="header-section" data-aos="fade-down" style="text-align: centre;">
         <h1 class="main-title">QC Management System</h1>
         <p class="subtitle">By Nexus Tech</p>
+        <p class="subtitle"> MSI INOCULATION SYSTEM CHECKLIST - DISA </p>
       </div>
         <div class="form-container" data-aos="fade-up" data-aos-delay="100">
             <div class="nav-buttons">
                 <button class="btn-secondary" onclick="window.location.href='../index.html'">Back to Main Menu</button>
-                <h2>QF 07 FBQ - 03 Quality Control Form</h2>
                 <div></div>
             </div>
             
@@ -931,12 +931,12 @@
                         <input type="number" id="powderMoisture" step="0.01">
                     </div>
                     
-<div class="form-group">
-    <div class="checkbox">
-        <input type="checkbox" id="isNewBag" class="stylish-checkbox">
-        <label for="isNewBag">New Bag Used</label>
-    </div>
-</div>
+                  <div class="form-group">
+                      <div class="checkbox">
+                          <input type="checkbox" id="isNewBag" class="stylish-checkbox">
+                          <label for="isNewBag">New Bag Used</label>
+                      </div>
+                  </div>
                 </div>
             </div>
             
@@ -1146,7 +1146,7 @@
             }
             
             try {
-                const response = await fetch(`http://localhost:3000/q03/qc/last03?product=${component}`);
+                const response = await fetch(`http://localhost:3000/api/qc/fbq03/product/${component}`);
                 const record = await response.json();
                 
                 const display = document.getElementById('lastRecordDisplay');
@@ -1183,7 +1183,7 @@
             }
             
             try {
-                const response = await fetch(`http://localhost:3000/q03/qc/last03?product=${component}`);
+                const response = await fetch(`http://localhost:3000/api/qc/fbq03?product=${component}`);
                 const record = await response.json();
                 
                 if (record) {
@@ -1236,7 +1236,7 @@
             };
             
             try {
-                const response = await fetch('http://localhost:3000/q03/api/qc03', {
+                const response = await fetch('http://localhost:3000/api/qc/fbq03', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
