@@ -523,6 +523,162 @@
       z-index: -1;
       background: transparent;
     }
+    /* Table Section */
+.table-section {
+  flex: 1;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.28);
+  margin: 1rem;
+}
+
+.table-header {
+  margin-bottom: 1.5rem;
+}
+
+.table-header h2 {
+  color: #1e293b;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Table Styles */
+.table-responsive {
+  flex: 1;
+  overflow: auto;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 1px solid #e2e8f0;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  font-size: 0.9rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th {
+  background-color: white;
+  color: #222;
+  padding: 1.2rem 1rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border: none;
+  box-shadow: 0 2px 4px rgba(125, 211, 252, 0.3);
+}
+
+th:first-child {
+  border-top-left-radius: 12px;
+}
+
+th:last-child {
+  border-top-right-radius: 12px;
+}
+
+th .sub {
+  font-size: 0.65rem;
+  font-weight: 400;
+  opacity: 0.9;
+  text-transform: none;
+  display: block;
+  margin-top: 2px;
+}
+
+td {
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+tr:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+/* Action Buttons */
+.action-btns {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.action-btn {
+  padding: 5px 8px;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-btn {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+}
+
+.edit-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.delete-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+}
+
+.action-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .table-responsive {
+    border-radius: 8px;
+  }
+  
+  th, td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .action-btns {
+    flex-direction: column;
+    gap: 3px;
+  }
+}
   </style>
 </head>
 <body>
@@ -539,9 +695,8 @@
   <div class="app-container">
     <img src="../bg2.png" alt="Logo" class="header-logo">
     <div class="header-section" data-aos="fade-down">
-      <h1 class="main-title">QC Management System</h1>
+      <h1 class="main-title">Inspection Result Report</h1>
       <p class="subtitle">By Nexus Tech</p>
-      <p class="subtitle">Inspection Result Report</p>
     </div>
 
     <div class="main-content">
@@ -677,6 +832,46 @@
       </div>
     </div>
   </div>
+  
+ <div class="table-section" data-aos="fade" data-aos-delay="200">
+  <div class="table-header">
+    <h2 style="text-align: center;">Previous Inspection Results</h2>
+  </div>
+  <div class="table-responsive">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Month</th>
+          <th>Part Name</th>
+          <th>Part No</th>
+          <th>Category</th>
+          <th>Model</th>
+          <th>Vendor</th>
+          <th>Issue Date</th>
+          <th>Check Item</th>
+          <th>Specification</th>
+          <th>Data Code 1</th>
+          <th>Data Code 2</th>
+          <th>Data Code 3</th>
+          <th>Data Code 4</th>
+          <th>Data Code 5</th>
+          <th>Data Code 6</th>
+          <th>Data Code 7</th>
+          <th>Data Code 8</th>
+          <th>Data Code 9</th>
+          <th>Data Code 10</th>
+          <th>Remark</th>
+          <th>Created At</th>
+          
+        </tr>
+      </thead>
+      <tbody id="results-table-body">
+        <!-- Data will be inserted here by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+</div>
 
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
