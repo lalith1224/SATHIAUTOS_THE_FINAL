@@ -493,6 +493,108 @@
         transform: translate(-50%, -50%) scale(1);
       }
     }
+    .table-section {
+  flex: 1;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 2rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.28);
+  margin: 1rem;
+}
+
+.table-header {
+  margin-bottom: 1.5rem;
+}
+
+.table-header h2 {
+  color: #1e293b;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Table Styles */
+.table-responsive {
+  flex: 1;
+  overflow: auto;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  border: 1px solid #e2e8f0;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  font-size: 0.9rem;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th {
+  background-color: white;
+  color: #222;
+  padding: 1.2rem 1rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border: none;
+  box-shadow: 0 2px 4px rgba(125, 211, 252, 0.3);
+}
+
+th:first-child {
+  border-top-left-radius: 12px;
+}
+
+th:last-child {
+  border-top-right-radius: 12px;
+}
+
+td {
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+tr:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+tr:last-child td:first-child {
+  border-bottom-left-radius: 12px;
+}
+
+tr:last-child td:last-child {
+  border-bottom-right-radius: 12px;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .table-responsive {
+    border-radius: 8px;
+  }
+  
+  th, td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+  }
+}
   </style>
 </head>
 <body>
@@ -509,9 +611,8 @@
   <div class="fullscreen-container" data-aos="fade-in">
     <img src="../bg2.png" alt="Logo" class="header-logo">
     <div class="header-section" data-aos="fade-down">
-      <h1 class="main-title">QC Management System</h1>
+      <h1 class="main-title">Error Proof Verification Checklist FDY</h1>
       <p class="subtitle">By Nexus Tech</p>
-      <p class="subtitle">Error Proof Verification Checklist FDY</p>
     </div>
 
     <div class="form-container" data-aos="fade-up" data-aos-delay="100">
@@ -551,8 +652,16 @@
           <h3>Error Proof Details</h3>
           <div class="form-grid">
             <div class="form-group">
+              <label for="error_proof_no">Error Proof No</label>
+              <input type="text" id="error_proof_no" name="error_proof_no" required>
+            </div>
+            <div class="form-group">
               <label for="error_proof_name">Error Proof Name</label>
               <input type="text" id="error_proof_name" name="error_proof_name" required>
+            </div>
+            <div class="form-group">
+              <label for="verification_date_shift">Verification Date/Shift</label>
+              <input type="text" id="verification_date_shift" name="verification_date_shift" required>
             </div>
             <div class="form-group">
               <label for="nature_of_error_proof">Nature of Error Proof</label>
@@ -607,18 +716,6 @@
           <h3>Issue Tracking</h3>
           <div class="form-grid">
             <div class="form-group">
-              <label for="error_proof_no">Error Proof No</label>
-              <input type="text" id="error_proof_no" name="error_proof_no" required>
-            </div>
-            <div class="form-group">
-              <label for="error_proof_name">Error Proof Name</label>
-              <input type="text" id="error_proof_name" name="error_proof_name" required>
-            </div>
-            <div class="form-group">
-              <label for="verification_date_shift">Verification Date/Shift</label>
-              <input type="text" id="verification_date_shift" name="verification_date_shift" required>
-            </div>
-            <div class="form-group">
               <label for="problem">Problem</label>
               <input type="text" id="problem" name="problem">
             </div>
@@ -667,7 +764,48 @@
       </div>
     </div>
   </div>
-
+<div class="table-section" data-aos="fade" >
+  <div class="table-header">
+    <h2>Error Proof Verification Checklist Records</h2>
+  </div>
+  <div class="table-responsive">
+    <table id="results-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Shift</th>
+          <th>Operator</th>
+          <th>Line</th>
+          <th>Serial No</th>
+          <th>Error Proof No</th>
+          <th>Error Proof Name</th>
+          <th>Verification Date/Shift</th>
+          <th>Nature of Error Proof</th>
+          <th>Frequency</th>
+          <th>Date1 Shift1</th>
+          <th>Date1 Shift2</th>
+          <th>Date1 Shift3</th>
+          <th>Date2 Shift1</th>
+          <th>Date2 Shift2</th>
+          <th>Date2 Shift3</th>
+          <th>Date3 Shift1</th>
+          <th>Date3 Shift2</th>
+          <th>Date3 Shift3</th>
+          <th>Problem</th>
+          <th>Root Cause</th>
+          <th>Corrective Action</th>
+          <th>Status</th>
+          <th>Reviewed By</th>
+          <th>Approved By</th>
+        </tr>
+      </thead>
+      <tbody id="results-table-body">
+        <!-- Data will be inserted here by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+</div>
   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script src="app.js"></script>
