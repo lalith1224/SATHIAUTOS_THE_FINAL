@@ -289,12 +289,25 @@
     <div class="dashboard-header">
       <h1 class="dashboard-title">Admin Dashboard</h1>
       <p>Manage user form access permissions</p>
+      <button id="goToIndexBtn" class="main-index-btn" style="display:inline-block;margin-top:1rem;padding:0.7rem 1.5rem;background:linear-gradient(135deg,#D2691E,#F4A261);color:#fff;border-radius:8px;font-weight:600;text-decoration:none;box-shadow:0 2px 8px rgba(210,105,30,0.12);transition:background 0.2s;border:none;cursor:pointer;">
+        <i class="ph ph-house" style="margin-right:0.5rem;"></i>Go to Main Index
+      </button>
     </div>
     <div id="user-list" class="user-list"></div>
     <div id="message" class="message"></div>
   </div>
 
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const goToIndexBtn = document.getElementById('goToIndexBtn');
+        if (goToIndexBtn) {
+          goToIndexBtn.addEventListener('click', function() {
+            window.location.href = '/main.html';
+          });
+        }
+      });
+    </script>
   <script>
     // Initialize AOS
     AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
@@ -329,6 +342,23 @@
     }
 
     // List of forms (update as needed)
+    // Map form names to actual directory paths
+    const formPaths = {
+      'Carbon Sulphur Leco Analysis Register': 'Carbon Sulphur Leco Analysis Register/index.html',
+      'Error Proof Verification Checklist FDY': 'Error Proof Verification Checklist FDY/index.html',
+      'Hardness Test Record': 'Hardness Test Record/index.html',
+      'Impact Test Report': 'Impact Test Report/index.html',
+      'Inspection Register': 'Inspection Register/index.html',
+      'Inspection Result Report': 'Inspection Result Report/index.html',
+      'Microstructure Analysis': 'Microstructure Analysis/index.html',
+      'Online Micro Coupon': 'Online Micro Coupon/index.html',
+      'QC Register': 'QC Register/index.html',
+      'Rejection Analysis Register': 'Rejection Analysis Register/index.html',
+      'Tensile Test Report': 'Tensile Test Report/index.html',
+      'Time Study': 'Time Study/index.html',
+      'MSI 90': 'MSI 90/fbq02.html',
+      'MSI 90 Incolation': 'msi 90 incolation/fbq03.html'
+    };
     const forms = [
       'Carbon Sulphur Leco Analysis Register',
       'Error Proof Verification Checklist FDY',
@@ -360,19 +390,19 @@
             if (user.role !== 'admin') {
               const userDiv = document.createElement('div');
               userDiv.className = 'user';
-              
+              let formsHtml = forms.map(form => `
+                <label class="form-checkbox">
+                  <input type="checkbox" value="${form}" 
+                    ${user.form_access && user.form_access.split(',').includes(form) ? 'checked' : ''}>
+                  <a href="/public/${formPaths[form] || 'index.html'}" target="_blank" style="text-decoration:none;color:inherit;">${form}</a>
+                </label>
+              `).join('');
               userDiv.innerHTML = `
                 <div class="user-header">
                   <span class="username">${user.username}</span>
                 </div>
                 <div class="forms-container">
-                  ${forms.map(form => `
-                    <label class="form-checkbox">
-                      <input type="checkbox" value="${form}" 
-                        ${user.form_access && user.form_access.split(',').includes(form) ? 'checked' : ''}>
-                      ${form}
-                    </label>
-                  `).join('')}
+                  ${formsHtml}
                 </div>
                 <button class="save-btn" onclick="assignAccess(${user.id}, this)">
                   <i class="ph ph-floppy-disk"></i>

@@ -261,11 +261,28 @@
         const formsContainer = document.getElementById('forms');
         formsContainer.innerHTML = '';
         
+        // Map form names to actual directory paths
+        const formPaths = {
+          'Carbon Sulphur Leco Analysis Register': 'Carbon Sulphur Leco Analysis Register/index.html',
+          'Error Proof Verification Checklist FDY': 'Error Proof Verification Checklist FDY/index.html',
+          'Hardness Test Record': 'Hardness Test Record/index.html',
+          'Impact Test Report': 'Impact Test Report/index.html',
+          'Inspection Register': 'Inspection Register/index.html',
+          'Inspection Result Report': 'Inspection Result Report/index.html',
+          'Microstructure Analysis': 'Microstructure Analysis/index.html',
+          'Online Micro Coupon': 'Online Micro Coupon/index.html',
+          'QC Register': 'QC Register/index.html',
+          'Rejection Analysis Register': 'Rejection Analysis Register/index.html',
+          'Tensile Test Report': 'Tensile Test Report/index.html',
+          'Time Study': 'Time Study/index.html',
+          'MSI 90': 'MSI 90/fbq02.html',
+          'MSI 90 Incolation': 'msi 90 incolation/fbq03.html'
+        };
         if (Array.isArray(data)) {
           data.forEach(form => {
             const formCard = document.createElement('a');
             formCard.className = 'form-card';
-            formCard.href = `/${form}/index.html`;
+            formCard.href = `/public/${formPaths[form] || 'index.html'}`;
             formCard.innerHTML = `
               <i class="ph ${formIcons[form] || 'ph-file-text'} form-icon"></i>
               <div class="form-name">${form}</div>
