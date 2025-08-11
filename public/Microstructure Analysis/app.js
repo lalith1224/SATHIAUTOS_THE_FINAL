@@ -87,9 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       setSubmitButtonState(true);
+      const token = localStorage.getItem('token');
       const response = await fetch(`${BACKEND_URL}/api/microstructure-analysis`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': 'Bearer ' + token } : {}) },
         body: JSON.stringify(data)
       });
 

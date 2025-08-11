@@ -79,7 +79,7 @@ const hardnessTestRecordRouter = require('./hardnessTestRecordRoutes');
 const carbonSulphurLecoAnalysisRegisterRouter = require('./carbonSulphurLecoAnalysisRegisterRoutes');
 const errorProofVerificationChecklistFDYRouter = require('./errorProofVerificationChecklistFDYRoutes');
 const authRouter = require('./auth/authRoutes').router;
-const listUsersRouter = require('./admin/listUsersRoutes');
+const listUsersRouter = require('./admin/listUsersRoutes 2');
 
 console.log('Registering routes...');
 try {

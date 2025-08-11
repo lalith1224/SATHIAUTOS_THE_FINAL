@@ -13,6 +13,134 @@ pool.connect((err, client, done) => {
 
 
 async function initializeDatabase() {
+  // --- AUDIT LOG SYSTEM ---
+  // Create audit_log table
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS audit_log (
+      id BIGSERIAL PRIMARY KEY,
+      audit_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      user_name TEXT,
+      action_type TEXT NOT NULL CHECK (action_type IN ('INSERT', 'UPDATE', 'DELETE')),
+      table_name TEXT NOT NULL,
+      record_pk TEXT NOT NULL,
+      old_data JSONB,
+      new_data JSONB,
+      changes_summary JSONB
+    );
+  `);
+
+  // Add indexes for fast searching
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_audit_log_table_record ON audit_log(table_name, record_pk);`);
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_audit_log_user_name ON audit_log(user_name);`);
+  await pool.query(`CREATE INDEX IF NOT EXISTS idx_audit_log_timestamp ON audit_log(audit_timestamp);`);
+
+  // jsonb_diff_val function
+  await pool.query(`
+    CREATE OR REPLACE FUNCTION jsonb_diff_val(val1 JSONB, val2 JSONB)
+    RETURNS JSONB AS $$
+    DECLARE
+      result JSONB;
+      v RECORD;
+    BEGIN
+       result = val2;
+       FOR v IN SELECT * FROM jsonb_each(val1) LOOP
+         IF result @> jsonb_build_object(v.key,v.value)
+            THEN result = result - v.key;
+         ELSIF NOT result ? v.key
+            THEN result = result || jsonb_build_object(v.key,'null');
+         END IF;
+       END LOOP;
+       RETURN result;
+    END;
+    $$ LANGUAGE plpgsql;
+  `);
+
+  // log_changes function
+  await pool.query(`
+    CREATE OR REPLACE FUNCTION log_changes()
+    RETURNS TRIGGER AS $$
+    DECLARE
+        pk_column_name TEXT;
+        pk_column_value TEXT;
+    BEGIN
+        SELECT c.column_name
+        INTO pk_column_name
+        FROM information_schema.key_column_usage AS c
+        LEFT JOIN information_schema.table_constraints AS t
+          ON t.constraint_name = c.constraint_name
+        WHERE t.table_name = TG_TABLE_NAME AND t.constraint_type = 'PRIMARY KEY'
+        LIMIT 1;
+
+        IF TG_OP = 'UPDATE' OR TG_OP = 'DELETE' THEN
+            EXECUTE format('SELECT ($1).%I::text', pk_column_name)
+            INTO pk_column_value
+            USING OLD;
+        ELSE
+            EXECUTE format('SELECT ($1).%I::text', pk_column_name)
+            INTO pk_column_value
+            USING NEW;
+        END IF;
+
+        INSERT INTO audit_log (
+            user_name,
+            action_type,
+            table_name,
+            record_pk,
+            old_data,
+            new_data,
+            changes_summary
+        )
+        VALUES (
+            current_setting('app.current_user', true),
+            TG_OP,
+            TG_TABLE_NAME,
+            pk_column_value,
+            CASE WHEN TG_OP = 'UPDATE' OR TG_OP = 'DELETE' THEN to_jsonb(OLD) ELSE NULL END,
+            CASE WHEN TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN to_jsonb(NEW) ELSE NULL END,
+            CASE WHEN TG_OP = 'UPDATE' THEN jsonb_diff_val(to_jsonb(OLD), to_jsonb(NEW)) ELSE NULL END
+        );
+
+        RETURN COALESCE(NEW, OLD);
+    END;
+    $$ LANGUAGE plpgsql;
+  `);
+
+  // Triggers for all main tables
+  const auditTables = [
+    'qc_register',
+    'inspection_register',
+    'tensile_test_report',
+    'microstructure_analysis',
+    'time_study_process',
+    'online_micro_coupon_inspection',
+    'master_data',
+    'recently_used_products',
+    'Hardness Test Record',
+    'CARBON - SULPHUR (LECO) ANALYSIS REGISTER',
+    'QF 07 FBQ - 02',
+    'QF 07 FBQ - 03',
+    'IMPACT TEST REPORT',
+    'REJECTION ANALYSIS REGISTER',
+    'INSPECTION RESULT REPORT',
+    'ERROR PROOF VERIFICATION CHECK LIST - FDY'
+  ];
+  for (const table of auditTables) {
+    const triggerName = table.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase() + '_audit';
+    await pool.query(`
+      DO $$
+      BEGIN
+        IF NOT EXISTS (
+          SELECT 1 FROM pg_trigger WHERE tgname = '${triggerName}'
+        ) THEN
+          EXECUTE 'CREATE TRIGGER ${triggerName}
+            AFTER INSERT OR UPDATE OR DELETE ON "${table}"
+            FOR EACH ROW EXECUTE FUNCTION log_changes();';
+        END IF;
+      END
+      $$;
+    `);
+  }
+  // --- END AUDIT LOG SYSTEM ---
   // master_data
   await pool.query(`
     CREATE TABLE IF NOT EXISTS master_data (
@@ -414,3 +542,4 @@ if (require.main === module) {
 }
 
 module.exports = initializeDatabase;
+

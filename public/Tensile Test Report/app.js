@@ -83,9 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const originalText = submitBtn.textContent;
       submitBtn.textContent = 'Submitting...';
       submitBtn.disabled = true;
+      const token = localStorage.getItem('token');
       const response = await fetch(`${BACKEND_URL}/api/tensile-test-report`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': 'Bearer ' + token } : {}) },
         body: JSON.stringify(data)
       });
       const result = await response.json();

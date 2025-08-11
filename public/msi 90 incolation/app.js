@@ -174,10 +174,12 @@ async function submitUnifiedData(event) {
         gauge_test: parseFloat(document.getElementById('gaugeTest').value) || null
     };
     try {
+        const token = localStorage.getItem('token');
         const response = await fetch(`${BACKEND_URL}/api/qc/fbq03`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                ...(token ? { 'Authorization': 'Bearer ' + token } : {})
             },
             body: JSON.stringify(data)
         });

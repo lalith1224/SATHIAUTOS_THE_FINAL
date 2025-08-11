@@ -45,8 +45,48 @@ router.post('/api/qc', async (req, res) => {
       hourly_time
     } = req.body;
 
-    const query = `
-      INSERT INTO "QF 07 FBQ - 02" (
+    // Get user from JWT
+    let userName = 'unknown';
+    const auth = req.headers.authorization;
+    if (auth) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+        const decoded = jwt.verify(auth.split(' ')[1], JWT_SECRET);
+        console.log('Decoded JWT payload:', decoded); // Debug: show JWT payload
+        userName = decoded.username || decoded.id || 'unknown';
+        console.log('Extracted userName for audit:', userName); // Debug: show extracted username
+      } catch (err) {
+        console.error('JWT verification error:', err);
+      }
+    } else {
+      console.log('No Authorization header found');
+    }
+
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      await client.query("SELECT set_config('app.current_user', $1, true)", [userName]);
+      const query = `
+        INSERT INTO "QF 07 FBQ - 02" (
+          component_in_production,
+          flow_rate_setting_a,
+          flow_rate_display_b,
+          hot_box_temp,
+          air_pressure,
+          inject_pressure,
+          feed_pipe_condition,
+          powder_size,
+          moisture,
+          is_new_bag,
+          air_drier_function,
+          filter_cleaning,
+          gauge_test,
+          hourly_time
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        RETURNING *;
+      `;
+      const values = [
         component_in_production,
         flow_rate_setting_a,
         flow_rate_display_b,
@@ -60,38 +100,23 @@ router.post('/api/qc', async (req, res) => {
         air_drier_function,
         filter_cleaning,
         gauge_test,
-        hourly_time
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-      RETURNING *;
-    `;
-
-    const values = [
-      component_in_production,
-      flow_rate_setting_a,
-      flow_rate_display_b,
-      hot_box_temp,
-      air_pressure,
-      inject_pressure,
-      feed_pipe_condition,
-      powder_size,
-      moisture,
-      is_new_bag,
-      air_drier_function,
-      filter_cleaning,
-      gauge_test,
-      hourly_time || new Date()
-    ];
-
-    const newRecord = await pool.query(query, values);
-    res.json(newRecord.rows[0]);
-
-    await pool.query(
-      `UPDATE master_data 
-       SET last_used = NOW() 
-       WHERE product_code = $1`,
-      [component_in_production]
-    );
-
+        hourly_time || new Date()
+      ];
+      const newRecord = await client.query(query, values);
+      await client.query(
+        `UPDATE master_data 
+         SET last_used = NOW() 
+         WHERE product_code = $1`,
+        [component_in_production]
+      );
+      await client.query('COMMIT');
+      res.json(newRecord.rows[0]);
+    } catch (err) {
+      await client.query('ROLLBACK');
+      throw err;
+    } finally {
+      client.release();
+    }
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -153,13 +178,35 @@ router.get('/qc/last', async (req, res) => {
 router.post('/update-last-used', async (req, res) => {
   try {
     const { product_code } = req.body;
-    await pool.query(
-      `UPDATE master_data 
-       SET last_used = NOW() 
-       WHERE product_code = $1`,
-      [product_code]
-    );
-    res.status(200).send("Last used timestamp updated");
+    // Get user from JWT
+    let userName = 'unknown';
+    const auth = req.headers.authorization;
+    if (auth) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+        const decoded = jwt.verify(auth.split(' ')[1], JWT_SECRET);
+        userName = decoded.username || decoded.id || 'unknown';
+      } catch {}
+    }
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      await client.query("SELECT set_config('app.current_user', $1, true)", [userName]);
+      await client.query(
+        `UPDATE master_data 
+         SET last_used = NOW() 
+         WHERE product_code = $1`,
+        [product_code]
+      );
+      await client.query('COMMIT');
+      res.status(200).send("Last used timestamp updated");
+    } catch (e) {
+      await client.query('ROLLBACK');
+      throw e;
+    } finally {
+      client.release();
+    }
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

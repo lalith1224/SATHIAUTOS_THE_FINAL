@@ -33,9 +33,10 @@ document.getElementById('timeStudyForm').addEventListener('submit', async functi
     }
     
     try {
+        const token = localStorage.getItem('token');
         const response = await fetch('http://localhost:3000/api/time-study', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': 'Bearer ' + token } : {}) },
             body: JSON.stringify(data)
         });
         

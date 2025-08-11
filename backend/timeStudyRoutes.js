@@ -21,38 +21,53 @@ router.post('/api/time-study', async (req, res) => {
         carbon_steel,
         part_name, heat_code, grade
     } = req.body;
-
+    // Get user from JWT
+    let userName = 'unknown';
+    const auth = req.headers.authorization;
+    if (auth) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+        const decoded = jwt.verify(auth.split(' ')[1], JWT_SECRET);
+        userName = decoded.username || decoded.id || 'unknown';
+      } catch {}
+    }
+    const client = await pool.connect();
     try {
-        // Insert new time study record
-        const result = await pool.query(
-            `INSERT INTO time_study_process (
-                shift,
-                c, si, mn, p, s, cr, ni, al, cu, sn, mo,
-                cac2_s, fesi_sh, femn_sic, cu_fecr,
-                carbon_steel,
-                part_name, heat_code, grade
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
-            RETURNING *`,
-            [
-                shift,
-                c, si, mn, p, s, cr, ni, al, cu, sn, mo,
-                cac2_s, fesi_sh, femn_sic, cu_fecr,
-                carbon_steel,
-                part_name, heat_code, grade
-            ]
-        );
-
-        if (result.rowCount === 1) {
-            res.status(201).json({
-                message: 'Time study data successfully recorded',
-                record: result.rows[0]
-            });
-        } else {
-            res.status(500).json({ error: 'Failed to insert time study data' });
-        }
+      await client.query('BEGIN');
+      await client.query("SELECT set_config('app.current_user', $1, true)", [userName]);
+      const result = await client.query(
+        `INSERT INTO time_study_process (
+            shift,
+            c, si, mn, p, s, cr, ni, al, cu, sn, mo,
+            cac2_s, fesi_sh, femn_sic, cu_fecr,
+            carbon_steel,
+            part_name, heat_code, grade
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
+        RETURNING *`,
+        [
+            shift,
+            c, si, mn, p, s, cr, ni, al, cu, sn, mo,
+            cac2_s, fesi_sh, femn_sic, cu_fecr,
+            carbon_steel,
+            part_name, heat_code, grade
+        ]
+      );
+      await client.query('COMMIT');
+      if (result.rowCount === 1) {
+        res.status(201).json({
+          message: 'Time study data successfully recorded',
+          record: result.rows[0]
+        });
+      } else {
+        res.status(500).json({ error: 'Failed to insert time study data' });
+      }
     } catch (error) {
-        console.error('Error inserting time study data:', error);
-        res.status(500).json({ error: 'Internal server error', details: error.message });
+      await client.query('ROLLBACK');
+      console.error('Error inserting time study data:', error);
+      res.status(500).json({ error: 'Internal server error', details: error.message });
+    } finally {
+      client.release();
     }
     });
 

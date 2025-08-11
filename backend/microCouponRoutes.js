@@ -23,14 +23,29 @@ router.post('/api/micro-coupon', async (req, res) => {
         remarks
     } = req.body;
 
+    // Get user from JWT for audit
+    let userName = 'unknown';
+    const auth = req.headers.authorization;
+    if (auth) {
+        try {
+            const jwt = require('jsonwebtoken');
+            const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+            const decoded = jwt.verify(auth.split(' ')[1], JWT_SECRET);
+            userName = decoded.username || decoded.id || 'unknown';
+        } catch {}
+    }
+
+    const client = await pool.connect();
     try {
-        // Insert new record
-        const result = await pool.query(
+        await client.query('BEGIN');
+        await client.query("SELECT set_config('app.current_user', $1, true)", [userName]);
+        const result = await client.query(
             `INSERT INTO online_micro_coupon_inspection (
                 disa, pp_code, item_description, nodularity_percentage, remarks
             ) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
             [disa, pp_code, item_description, nodularity_percentage, remarks]
         );
+        await client.query('COMMIT');
 
         if (result.rowCount === 1) {
             res.status(201).json({
@@ -42,8 +57,11 @@ router.post('/api/micro-coupon', async (req, res) => {
             res.status(500).json({ error: 'Failed to insert Micro Coupon Inspection data' });
         }
     } catch (error) {
+        await client.query('ROLLBACK');
         console.error('Error submitting Micro Coupon Inspection data:', error);
         res.status(500).json({ error: 'Internal server error', details: error.message, stack: error.stack });
+    } finally {
+        client.release();
     }
 });
 
@@ -99,15 +117,28 @@ router.get('/api/micro-coupon/by-disa/:disa', async (req, res) => {
 
 router.delete('/api/micro-coupon/:id', async (req, res) => {
     const { id } = req.params;
-    
+    // Get user from JWT
+    let userName = 'unknown';
+    const auth = req.headers.authorization;
+    if (auth) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+        const decoded = jwt.verify(auth.split(' ')[1], JWT_SECRET);
+        userName = decoded.username || decoded.id || 'unknown';
+      } catch {}
+    }
+    const client = await pool.connect();
     try {
-        const result = await pool.query(
-            'DELETE FROM online_micro_coupon_inspection WHERE id = $1 RETURNING *',
-            [id]
-        );
-        
-        if (result.rowCount === 1) {
-            res.json({
+      await client.query('BEGIN');
+      await client.query("SELECT set_config('app.current_user', $1, true)", [userName]);
+      const result = await client.query(
+        'DELETE FROM online_micro_coupon_inspection WHERE id = $1 RETURNING *',
+        [id]
+      );
+      await client.query('COMMIT');
+      if (result.rowCount === 1) {
+        res.json({
                 message: 'Record deleted successfully',
                 deletedRecord: result.rows[0]
             });

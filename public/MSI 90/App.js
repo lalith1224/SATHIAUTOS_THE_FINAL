@@ -91,9 +91,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     closeProductModal();
 
     try {
-      await fetch('/update-last-used', {
+      const token = localStorage.getItem('token');
+      await fetch('http://localhost:3000/update-last-used', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': 'Bearer ' + token } : {}) },
         body: JSON.stringify({ product_code: product.product_code })
       });
     } catch (error) {
@@ -143,9 +144,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     try {
+      // Get JWT from localStorage (assumes login sets localStorage.token)
+      const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:3000/api/qc', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+        },
         body: JSON.stringify(qcData)
       });
 

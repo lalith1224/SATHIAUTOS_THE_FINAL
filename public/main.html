@@ -216,6 +216,43 @@
             min-height: 60px;
         }
 
+        /* Admin assign controls */
+        .admin-assign {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.35);
+            display: none; /* shown only for admin */
+        }
+        .admin-assign .assign-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        .admin-assign .assign-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .admin-assign select {
+            width: 100%;
+            min-height: 42px;
+            padding: 0.4rem 0.5rem;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.8);
+        }
+        .admin-assign button {
+            padding: 0.55rem 0.9rem;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark-gray) 100%);
+            color: #fff;
+            cursor: pointer;
+        }
+
         .btn {
             display: inline-flex;
             align-items: center;
@@ -417,113 +454,216 @@
             </div>
             <h1 class="main-title">SAKTHI AUTOS</h1>
             <p class="subtitle">Quality Management System Dashboard - By Nexus Techs</p>
-            <button onclick="window.location.href='./auth/admin.html'" class="btn" style="margin: 1rem 0; background: linear-gradient(135deg,#D2691E,#F4A261); color: #fff; border-radius: 8px; font-weight: 600; box-shadow: 0 2px 8px rgba(210,105,30,0.12); border: none; cursor: pointer; padding: 0.7rem 1.5rem;">
-              <i class='lucide lucide-user-cog' style='margin-right:0.5rem;'></i>Admin Panel
-            </button>
+            <div style="display:flex;gap:0.75rem;justify-content:center;margin:1rem 0;flex-wrap:wrap;">
+              <button onclick="window.location.href='./auth/admin.html'" class="btn" style="background: linear-gradient(135deg,#D2691E,#F4A261); color: #fff; border-radius: 8px; font-weight: 600; box-shadow: 0 2px 8px rgba(210,105,30,0.12); border: none; cursor: pointer; padding: 0.7rem 1.5rem;">
+                <i class='lucide lucide-user-cog' style='margin-right:0.5rem;'></i>Admin Panel
+              </button>
+              <button onclick="window.location.href='./auth/audit-log.html'" class="btn" style="background: linear-gradient(135deg,#4B5563,#111827); color: #fff; border-radius: 8px; font-weight: 600; box-shadow: 0 2px 8px rgba(17,24,39,0.15); border: none; cursor: pointer; padding: 0.7rem 1.5rem;">
+                <i class='lucide lucide-list' style='margin-right:0.5rem;'></i>Audit Log
+              </button>
+            </div>
         </div>
 
         <div class="cards-container">
             <div class="cards">
                 
-                <div class="card" data-aos="fade-up" data-aos-delay="150">
+                <div class="card" data-aos="fade-up" data-aos-delay="150" data-form-name="MSI 90">
                     <h3>MSI 90 INOCULATION</h3>
                     <p>Form for MSI 90 parameters and monitoring.</p>
                     <a href="./MSI 90/fbq02.html" class="btn">
                         <i class="lucide lucide-settings"></i>
                         Access Form
                     </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card" data-aos="fade-up" data-aos-delay="200">
+                <div class="card" data-aos="fade-up" data-aos-delay="200" data-form-name="MSI 90 Incolation">
                     <h3> MSI INOCULATION</h3>
                     <p>Form for MSI 90 Incubation parameters.</p>
                     <a href="./msi 90 incolation/fbq03.html" class="btn">
                         <i class="lucide lucide-flask-conical"></i>
                         Access Form
                     </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card" data-aos="fade-up" data-aos-delay="250">
+                <div class="card" data-aos="fade-up" data-aos-delay="250" data-form-name="Time Study">
                     <h3> TIME STUDY AND PROCESS CONTROL</h3>
                     <p>Form for recording time study metrics and parameters.</p>
                     <a href="./Time Study/index.html" class="btn">
                         <i class="lucide lucide-clock"></i>
                         Access Form
                     </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card" data-aos="fade-up" data-aos-delay="300">
+                <div class="card" data-aos="fade-up" data-aos-delay="300" data-form-name="QC Register">
                     <h3>Q.C.REGISTER</h3>
                     <p>Form for quality control register data.</p>
                     <a href="./QC Register/index.html" class="btn">
                         <i class="lucide lucide-clipboard-check"></i>
                         Access Form
                     </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card" data-aos="fade-up" data-aos-delay="350">
+                <div class="card" data-aos="fade-up" data-aos-delay="350" data-form-name="Online Micro Coupon">
                     <h3>ONLINE MICRO COUPEN INSPECTION RECORD </h3>
                     <p>Form for online micro coupon inspection and nodularity analysis.</p>
                     <a href="./Online Micro Coupon/index.html" class="btn">
                         <i class="lucide lucide-inspect"></i>
                         Access Form
                     </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card" data-aos="fade-up" data-aos-delay="400">
+                <div class="card" data-aos="fade-up" data-aos-delay="400" data-form-name="Inspection Register">
                     <h3> ONLINE FEEDBACK INSPECTION REGISTER</h3>
                     <p>Form for recording inspection register data and shift-wise defects.</p>
                     <a href="./Inspection Register/index.html" class="btn">
                         <i class="lucide lucide-clipboard-list"></i>
                         Access Form
                     </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card" data-aos="fade-up" data-aos-delay="450">
+                <div class="card" data-aos="fade-up" data-aos-delay="450" data-form-name="Tensile Test Report">
                     <h3>TENSILE TEST REPORT</h3>
                     <p>Form for recording tensile test results and mechanical properties.</p>
                     <a href="./Tensile Test Report/index.html" class="btn">
                         <i class="lucide lucide-test-tube"></i>
                         Access Form
                     </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="card" data-aos="fade-up" data-aos-delay="100">
+                <div class="card" data-aos="fade-up" data-aos-delay="100" data-form-name="Microstructure Analysis">
                     <h3>MICRO  STRUCTURE  ANALYSIS  REGISTER</h3>
                     <p>Form for recording microstructure analysis data and metallurgical properties.</p>
                     <a href="./Microstructure Analysis/index.html" class="btn">
                         <i class="lucide lucide-microscope"></i>
                         Access Form
                     </a>
+                    <div class="admin-assign">
+                        <div class="assign-title">Assign access to users</div>
+                        <div class="assign-row">
+                            <select class="assign-select" multiple></select>
+                            <button class="assign-save">Save</button>
+                        </div>
+                    </div>
                 </div>
-                  <div class="card" >
+                  <div class="card" data-form-name="Inspection Result Report">
                 <h3> INSPECTION RESULT REPORT</h3>
                 <p>Form for recording inspection result report data.</p>
                 <a href="./Inspection Result Report/index.html" class="btn"> <i class="lucide lucide-microscope"></i>Access Form</a>
+                <div class="admin-assign">
+                    <div class="assign-title">Assign access to users</div>
+                    <div class="assign-row">
+                        <select class="assign-select" multiple></select>
+                        <button class="assign-save">Save</button>
+                    </div>
                 </div>
-                 <div class="card">
+                </div>
+                 <div class="card" data-form-name="Impact Test Report">
                 <h3>IMPACT TEST REPORT</h3>
                 <p>Form for recording impact test report data.</p>
                 <a href="./Impact Test Report/index.html" class="btn">Access Form</a>
+                 <div class="admin-assign">
+                     <div class="assign-title">Assign access to users</div>
+                     <div class="assign-row">
+                         <select class="assign-select" multiple></select>
+                         <button class="assign-save">Save</button>
+                     </div>
                  </div>
-                 <div class="card">
+                 </div>
+                 <div class="card" data-form-name="Rejection Analysis Register">
                 <h3> REJECTION ANALYSIS REGISTER</h3>
                 <p>Form for recording rejection analysis register data.</p>
                 <a href="./Rejection Analysis Register/index.html" class="btn">Access Form</a>
+                 <div class="admin-assign">
+                     <div class="assign-title">Assign access to users</div>
+                     <div class="assign-row">
+                         <select class="assign-select" multiple></select>
+                         <button class="assign-save">Save</button>
+                     </div>
+                 </div>
                 </div>
-                <div class="card">
+                <div class="card" data-form-name="Hardness Test Record">
                 <h3>HARDNESS TEST RECORD</h3>
                 <p>Form for recording hardness test record data.</p>
                 <a href="./Hardness Test Record/index.html" class="btn">Access Form</a>
+                <div class="admin-assign">
+                    <div class="assign-title">Assign access to users</div>
+                    <div class="assign-row">
+                        <select class="assign-select" multiple></select>
+                        <button class="assign-save">Save</button>
+                    </div>
                 </div>
-                 <div class="card">
+                </div>
+                 <div class="card" data-form-name="Carbon Sulphur Leco Analysis Register">
                 <h3>CARBON SULPHUR LECO ANALYSIS REGISTER</h3>
                 <p>Form for recording carbon and sulphur analysis data.</p>
                 <a href="./Carbon Sulphur Leco Analysis Register/index.html" class="btn">Access Form</a>
+                 <div class="admin-assign">
+                     <div class="assign-title">Assign access to users</div>
+                     <div class="assign-row">
+                         <select class="assign-select" multiple></select>
+                         <button class="assign-save">Save</button>
+                     </div>
+                 </div>
                 </div>
-                 <div class="card">
+                 <div class="card" data-form-name="Error Proof Verification Checklist FDY">
                 <h3> ERROR PROOF VERIFICATION CHECK LIST - FDY</h3>
                 <p>Form for error proof verification checklist FDY data.</p>
                 <a href="./Error Proof Verification Checklist FDY/index.html" class="btn">Access Form</a>
+                 <div class="admin-assign">
+                     <div class="assign-title">Assign access to users</div>
+                     <div class="assign-row">
+                         <select class="assign-select" multiple></select>
+                         <button class="assign-save">Save</button>
+                     </div>
+                 </div>
             </div>
             </div>
             
@@ -549,6 +689,127 @@
             setTimeout(() => {
                 loader.classList.add('fade-out');
             }, 1000);
+        });
+
+        // Admin-only: assign access per form directly from cards
+        document.addEventListener('DOMContentLoaded', () => {
+          try {
+            const role = localStorage.getItem('role');
+            const token = localStorage.getItem('token');
+            if (role !== 'admin' || !token) return; // Only admins see controls
+
+            const cards = Array.from(document.querySelectorAll('.card[data-form-name]'));
+            if (!cards.length) return;
+
+            // Reveal admin UI blocks
+            cards.forEach(card => {
+              const adminBlock = card.querySelector('.admin-assign');
+              if (adminBlock) adminBlock.style.display = 'block';
+            });
+
+            // Fetch users and hydrate selects
+            fetch('http://localhost:3000/admin/list-users', {
+              headers: { 'Authorization': 'Bearer ' + token }
+            })
+              .then(res => res.json())
+              .then(users => {
+                if (!Array.isArray(users)) return;
+
+                // Cache current access per user
+                const userIdToForms = new Map();
+                users.forEach(u => {
+                  const forms = (u.form_access || '')
+                    .split(',')
+                    .map(f => f.trim())
+                    .filter(Boolean);
+                  userIdToForms.set(u.id, forms);
+                });
+
+                cards.forEach(card => {
+                  const formName = card.getAttribute('data-form-name');
+                  const select = card.querySelector('.assign-select');
+                  const saveBtn = card.querySelector('.assign-save');
+                  if (!select || !saveBtn) return;
+
+                  // Populate options
+                  select.innerHTML = '';
+                  users
+                    .filter(u => u.role !== 'admin')
+                    .forEach(u => {
+                      const opt = document.createElement('option');
+                      opt.value = String(u.id);
+                      opt.textContent = u.username;
+                      const forms = userIdToForms.get(u.id) || [];
+                      if (forms.includes(formName)) opt.selected = true;
+                      select.appendChild(opt);
+                    });
+
+                  // Save handler for this card/form
+                  saveBtn.addEventListener('click', async () => {
+                    const selectedIds = new Set(Array.from(select.selectedOptions).map(o => Number(o.value)));
+                    const updates = [];
+
+                    users.filter(u => u.role !== 'admin').forEach(u => {
+                      const currentForms = new Set(userIdToForms.get(u.id) || []);
+                      const hasNow = selectedIds.has(u.id);
+                      const hadBefore = currentForms.has(formName);
+
+                      if (hasNow && !hadBefore) {
+                        currentForms.add(formName);
+                      } else if (!hasNow && hadBefore) {
+                        currentForms.delete(formName);
+                      } else {
+                        return; // no change
+                      }
+
+                      const formsArray = Array.from(currentForms);
+                      updates.push(
+                        fetch('http://localhost:3000/auth/assign-access', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                          },
+                          body: JSON.stringify({ userId: u.id, forms: formsArray })
+                        }).then(r => r.json())
+                      );
+                    });
+
+                    if (!updates.length) return;
+
+                    try {
+                      await Promise.all(updates);
+                      // Refresh local cache by refetching users
+                      const fresh = await fetch('http://localhost:3000/admin/list-users', {
+                        headers: { 'Authorization': 'Bearer ' + token }
+                      }).then(r => r.json());
+                      if (Array.isArray(fresh)) {
+                        userIdToForms.clear();
+                        fresh.forEach(u => {
+                          const forms = (u.form_access || '')
+                            .split(',')
+                            .map(f => f.trim())
+                            .filter(Boolean);
+                          userIdToForms.set(u.id, forms);
+                        });
+                      }
+                      const original = saveBtn.textContent;
+                      saveBtn.textContent = 'Saved';
+                      setTimeout(() => (saveBtn.textContent = original), 1200);
+                    } catch (e) {
+                      const original = saveBtn.textContent;
+                      saveBtn.textContent = 'Error';
+                      setTimeout(() => (saveBtn.textContent = original), 1500);
+                    }
+                  });
+                });
+              })
+              .catch(() => {
+                // fail silently for non-admin sessions
+              });
+          } catch (_) {
+            // no-op
+          }
         });
     </script>
 </body>

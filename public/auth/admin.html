@@ -293,6 +293,23 @@
         <i class="ph ph-house" style="margin-right:0.5rem;"></i>Go to Main Index
       </button>
     </div>
+    <!-- Create User Panel -->
+    <div class="create-user" style="display:flex;flex-direction:column;gap:0.75rem;background:rgba(255,255,255,0.25);border:1px solid var(--card-border);border-radius:var(--radius-md);padding:1rem;margin-bottom:1rem;">
+      <div style="font-weight:700;color:var(--primary-accent);">Create New User</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 180px auto;gap:0.6rem;align-items:center;">
+        <input id="new-username" type="text" placeholder="Username" style="padding:0.6rem;border-radius:10px;border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.75);">
+        <input id="new-password" type="password" placeholder="Password" style="padding:0.6rem;border-radius:10px;border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.75);">
+        <select id="new-role" style="padding:0.6rem;border-radius:10px;border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.9);">
+          <option value="user" selected>User</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button id="createUserBtn" class="save-btn" style="padding:0.6rem 1rem;min-width:120px;">
+          <i class="ph ph-user-plus"></i>
+          Create
+        </button>
+      </div>
+    </div>
+
     <div id="user-list" class="user-list"></div>
     <div id="message" class="message"></div>
   </div>
@@ -458,6 +475,42 @@
     }
 
     fetchUsers();
+
+    // Create user handler
+    const createBtn = document.getElementById('createUserBtn');
+    if (createBtn) {
+      createBtn.addEventListener('click', async () => {
+        const username = document.getElementById('new-username').value.trim();
+        const password = document.getElementById('new-password').value;
+        const role = document.getElementById('new-role').value;
+        if (!username || !password) {
+          showMessage('Username and password are required', 'error');
+          return;
+        }
+        try {
+          const res = await fetch('http://localhost:3000/auth/admin/create-user', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ username, password, role })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            showMessage(`User ${data.username} created`, 'success');
+            document.getElementById('new-username').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('new-role').value = 'user';
+            fetchUsers();
+          } else {
+            showMessage(data.error || 'Failed to create user', 'error');
+          }
+        } catch (_) {
+          showMessage('Network error. Please try again.', 'error');
+        }
+      });
+    }
   </script>
 </body>
 </html>

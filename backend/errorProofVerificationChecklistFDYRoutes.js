@@ -24,8 +24,22 @@ router.get('/api/error-proof-verification-checklist-fdy', async (req, res) => {
 // Create a new record
 router.post('/api/error-proof-verification-checklist-fdy', async (req, res) => {
   const { line, serial_no, error_proof_no, error_proof_name, verification_date_shift, nature_of_error_proof, frequency, date1_shift1_obs, date1_shift2_obs, date1_shift3_obs, date2_shift1_obs, date2_shift2_obs, date2_shift3_obs, date3_shift1_obs, date3_shift2_obs, date3_shift3_obs, problem, root_cause, corrective_action, status, reviewed_by, approved_by, remarks } = req.body;
+  // Get user from JWT
+  let userName = 'unknown';
+  const auth = req.headers.authorization;
+  if (auth) {
+    try {
+      const jwt = require('jsonwebtoken');
+      const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+      const decoded = jwt.verify(auth.split(' ')[1], JWT_SECRET);
+      userName = decoded.username || decoded.id || 'unknown';
+    } catch {}
+  }
+  const client = await pool.connect();
   try {
-    const result = await pool.query(
+    await client.query('BEGIN');
+    await client.query("SELECT set_config('app.current_user', $1, true)", [userName]);
+    const result = await client.query(
       `INSERT INTO "ERROR PROOF VERIFICATION CHECK LIST - FDY" (
         line, serial_no, error_proof_no, error_proof_name, verification_date_shift, nature_of_error_proof, frequency,
         date1_shift1_obs, date1_shift2_obs, date1_shift3_obs, date2_shift1_obs, date2_shift2_obs, date2_shift3_obs,
@@ -39,6 +53,7 @@ router.post('/api/error-proof-verification-checklist-fdy', async (req, res) => {
         date3_shift1_obs, date3_shift2_obs, date3_shift3_obs, problem, root_cause, corrective_action, status,
         reviewed_by, approved_by, remarks]
     );
+    await client.query('COMMIT');
     if (result.rowCount === 1) {
       res.status(201).json({
         message: 'Error Proof Verification Checklist FDY data submitted successfully',
@@ -48,8 +63,11 @@ router.post('/api/error-proof-verification-checklist-fdy', async (req, res) => {
       res.status(500).json({ error: 'Failed to insert Error Proof Verification Checklist FDY data' });
     }
   } catch (err) {
+    await client.query('ROLLBACK');
     res.status(500).json({ error: 'Failed to create record' });
-             console.error("🔥 Error in /hardness-test-record route:", err);
+    console.error("🔥 Error in /hardness-test-record route:", err);
+  } finally {
+    client.release();
   }
 });
 

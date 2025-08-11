@@ -89,23 +89,45 @@ router.post('/api/qc/fbq03', async (req, res) => {
       hopper_cleaning || null,
       inoculant_powder_size || null,
       inoculant_powder_moisture || null,
-      typeof is_new_bag === 'boolean' ? is_new_bag : null,
+      (is_new_bag === true || is_new_bag === 'true' || is_new_bag === 'Done' || is_new_bag === 1) ? true :
+      (is_new_bag === false || is_new_bag === 'false' || is_new_bag === 0) ? false :
+      (is_new_bag == null ? null : false),
       gauge_test || null,
       micro_structure,
       macro_structure
     ];
 
-    const newRecord = await pool.query(query, values);
+    // Get user from JWT for audit
+    let userName = 'unknown';
+    const auth = req.headers.authorization;
+    if (auth) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
+        const decoded = jwt.verify(auth.split(' ')[1], JWT_SECRET);
+        userName = decoded.username || decoded.id || 'unknown';
+      } catch {}
+    }
 
-    // Update last used timestamp
-    await pool.query(
-      `UPDATE master_data 
-       SET last_used = NOW() 
-       WHERE product_code = $1`,
-      [component_in_production]
-    );
-
-    res.json(newRecord.rows[0]);
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      await client.query("SELECT set_config('app.current_user', $1, true)", [userName]);
+      const newRecord = await client.query(query, values);
+      await client.query(
+        `UPDATE master_data 
+         SET last_used = NOW() 
+         WHERE product_code = $1`,
+        [component_in_production]
+      );
+      await client.query('COMMIT');
+      res.json(newRecord.rows[0]);
+    } catch (dbErr) {
+      await client.query('ROLLBACK');
+      throw dbErr;
+    } finally {
+      client.release();
+    }
   } catch (err) {
     console.error('Error submitting QC FBQ03 data:', err.message);
     res.status(500).json({ error: 'Server error', details: err.message });
@@ -131,24 +153,7 @@ router.get('/api/qc/fbq03/:component', async (req, res) => {
   }
 });
 
-// Get specific event type records for a component
-router.get('/api/qc/fbq03/:component/:eventType', async (req, res) => {
-  try {
-    const { component, eventType } = req.params;
-    
-    const query = `
-      SELECT * FROM "QF 07 FBQ - 03"
-      WHERE component_in_production = $1 AND event_type = $2
-      ORDER BY event_time DESC
-    `;
-    
-    const result = await pool.query(query, [component, eventType]);
-    res.json(result.rows);
-  } catch (err) {
-    console.error('Error fetching QC records by event type:', err.message);
-    res.status(500).json({ error: 'Server error', details: err.message });
-  }
-});
+// Removed /api/qc/fbq03/:component/:eventType route because event_type column does not exist
 
 // Get latest record for a component
 router.get('/api/qc/fbq03/latest/:component', async (req, res) => {

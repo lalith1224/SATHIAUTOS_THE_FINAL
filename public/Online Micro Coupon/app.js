@@ -84,10 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
             submitBtn.textContent = 'Submitting...';
             submitBtn.disabled = true;
 
+            const token = localStorage.getItem('token');
             const response = await fetch('http://localhost:3000/api/micro-coupon', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    ...(token ? { 'Authorization': 'Bearer ' + token } : {})
                 },
                 body: JSON.stringify(formData)
             });

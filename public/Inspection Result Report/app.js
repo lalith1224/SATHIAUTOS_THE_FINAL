@@ -34,9 +34,10 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.forEach((value, key) => { data[key] = value; });
 
         try {
+            const token = localStorage.getItem('token');
             const response = await fetch('http://localhost:3000/api/inspection-result-report', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': 'Bearer ' + token } : {}) },
                 body: JSON.stringify(data)
             });
             const result = await response.json();

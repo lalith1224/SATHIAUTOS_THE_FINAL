@@ -25,10 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     data[key] = value.trim();
                 });
 
+                const token = localStorage.getItem('token');
                 const response = await fetch('http://localhost:3000/api/error-proof-verification-checklist-fdy', {
                     method: 'POST',
                     headers: { 
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        ...(token ? { 'Authorization': 'Bearer ' + token } : {})
                     },
                     body: JSON.stringify(data)
                 });
